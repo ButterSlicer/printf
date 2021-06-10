@@ -47,13 +47,13 @@ void	ft_putchar_fd(char c, int fd)
 	if (fd >= 0)
 		write(fd, &c, 1);
 }
-t_flag init_struct(t_flag flag)
+t_flag init_struct(t_flag *flag)
 {
-	flag.width = 0;
-	flag.dot = 0;
-	flag.minus = 0;
-	flag.zero = 0;
-	flag.digit = 0;
+	flag -> width = 0;
+	flag -> dot = 0;
+	flag -> minus = 0;
+	flag -> zero = 0;
+	flag -> digit = 0;
 	return (flag);
 }
 void ft_parce_c(va_list ap)
@@ -64,7 +64,7 @@ void ft_parce_c(va_list ap)
 	ft_putchar_fd(c,1);
 	//write(1,"\0",1);
 }
-// void ft_parce_s(va_list ap, t_flag *flag)
+//void ft_parce_s(va_list ap, t_flag *flag)
 // {
 // 	char *str;
 // 	char *p;
@@ -82,9 +82,10 @@ void ft_parce_c(va_list ap)
 // }
 void	ft_parcing(const char *s, va_list ap, int *count)
 {
-	t_flag flag;
+	t_flag *flag;
+	flag = (sizeof(t_flag));
 	flag = init_struct(flag);
-
+	
 	while (*s)
 	{
 		write(1, &*s, 1);
@@ -94,16 +95,16 @@ void	ft_parcing(const char *s, va_list ap, int *count)
 			s++;
 			(*count)++;
 			if (*s == '-')
-				flag.minus += 1;
-			if (*s == '0' && flag.zero != 1)
+				flag -> minus += 1;
+			if (*s == '0' && flag -> zero != 1)
 			{
-				flag.zero += 1;
+				flag -> zero += 1;
 				s++;
 				(*count)++;
 			}
 			if (*s >= '0' && *s <= '9')
 			{
-				flag.width = ft_atoi(s);
+				flag -> width = ft_atoi(s);
 				while (*s >= '0' && *s <= '9')
 				{
 					s++;
@@ -112,7 +113,7 @@ void	ft_parcing(const char *s, va_list ap, int *count)
 			}
 			if (*s == '*')
 			{
-				flag.width = va_arg(ap, int);
+				flag -> width = va_arg(ap, int);
 				s++;
 				(*count)++;
 			}
@@ -129,7 +130,7 @@ void	ft_parcing(const char *s, va_list ap, int *count)
 				(*count)++;
 				if (*s >= '0' && *s <= '9')
 				{
-					flag.dot = ft_atoi(s);
+					flag -> dot = ft_atoi(s);
 					while (*s >= '0' && *s <= '9')
 					{
 						s++;
@@ -138,19 +139,17 @@ void	ft_parcing(const char *s, va_list ap, int *count)
 				}
 				if (*s == '*')
 				{
-					flag.dot = va_arg(ap, int);
+					flag -> dot = va_arg(ap, int);
 					s++;
 					(*count)++;
 				}
 			}
 		}
-		//write(1, &*s, 1);
-		//s++;
 		(*count)++;
 	}
-	printf("\nwidth--> %d\n",flag.width);
-	printf("dot---->%d\n", flag.dot);
-	printf("zero--->%d\n",flag.zero);
+	printf("\nwidth--> %d\n",flag -> width);
+	printf("dot---->%d\n", flag -> dot);
+	printf("zero--->%d\n",flag -> zero);
 }
 int ft_printf(const char *s, ...)
 {
@@ -169,9 +168,11 @@ int main()
 {
     int item;
 
-    item = 1234;
-    ft_printf("origin printf=%*.233d",01234,item);
-    printf("origin printf=%*.233d",01234,item);
+    item = 12;
+	//printf("%d\n",014);
+    ft_printf("my printf=%0*.*d",012,04, item);
+   // printf("origin printf=%-0233.d",12, item);
     // printf("origin printf = %s",item);
+	
 }
 
